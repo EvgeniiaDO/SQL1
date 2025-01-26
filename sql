@@ -1,0 +1,56 @@
+
+CREATE table IF NOT EXISTS Genre (
+    GenreID SERIAL PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT exists Artist (
+    ArtistID SERIAL PRIMARY KEY,
+    Nickname VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT exists Album (
+    AlbumID SERIAL PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL,
+    Year INT
+);
+
+CREATE TABLE IF NOT exists Track (
+    TrackID SERIAL PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL,
+    Duration INTERVAL
+);
+
+CREATE TABLE IF NOT exists Collection (
+   CollectionID SERIAL PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL,
+    Year INT,
+    TrackID INT,
+    CONSTRAINT fk_Track FOREIGN KEY (TrackID) REFERENCES Track(TrackID) ON DELETE CASCADE
+);
+
+
+
+CREATE TABLE IF NOT exists TrackAlbum (
+    TrackID INT,
+    AlbumID INT,
+    PRIMARY KEY (TrackID, AlbumID),
+    CONSTRAINT fk_Track FOREIGN KEY (TrackID) REFERENCES Track(TrackID) ON DELETE CASCADE,
+    CONSTRAINT fk_Album FOREIGN KEY (AlbumID) REFERENCES Album(AlbumID) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT exists ArtistGenre (
+    ArtistID INT,
+    GenreID INT,
+    PRIMARY KEY (ArtistID, GenreID),
+    CONSTRAINT fk_Artist FOREIGN KEY (ArtistID) REFERENCES Artist(ArtistID) ON DELETE CASCADE,
+    CONSTRAINT fk_Genre FOREIGN KEY (GenreID) REFERENCES Genre(GenreID) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT exists AlbumArtist (
+   AlbumID INT,
+    ArtistID INT,
+    PRIMARY KEY (AlbumID, ArtistID),
+    CONSTRAINT fk_Album FOREIGN KEY (AlbumID) REFERENCES Album(AlbumID) ON DELETE CASCADE,
+    CONSTRAINT fk_Artist FOREIGN KEY (ArtistID) REFERENCES Artist(ArtistID) ON DELETE CASCADE
+);
